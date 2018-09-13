@@ -22,7 +22,7 @@ while (@ob_end_flush());
 			p {margin: 0 0 10px 0}
 			b {color: orangered;font-weight: normal}
 			i {color: forestgreen;font-style: normal}
-			a {text-decoration: underline;color: blue}
+			a {text-decoration: underline;color: #fff;}
 		</style>
 	</head>
 	<body>
@@ -77,7 +77,7 @@ while (@ob_end_flush());
 				}
 				$zip->close();
 				echo $fileCnt . ' Dateien extrahiert.<br>';
-				echo '<p>Sie können nun das Installationsprogramm ausführen:<br><a href="install/index.php">Zum Instalationsprogramm</a></p>';
+				echo '<br><p>Sie können nun das Installationsprogramm ausführen:<br><a href="install/index.php">Zum Instalationsprogramm</a></p>';
 				@unlink($zipFileName);
 			} else {
 				die('<b>Entpacken der Datei "' . $zipFileName . '" fehlgeschlagen.</b>');
