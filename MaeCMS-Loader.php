@@ -46,8 +46,9 @@ while (@ob_end_flush());
 			if(FALSE === $f)
 				die('<b>download fehlgeschlagen, URL: ' . $archiveUrl . '</b>');
 			echo '<p>ZIP Archiv entpacken...</p>';
-			$zip = new ZipArchive;
-			$res = $zip->open($zipFileName);
+			$fileCnt    = 0;
+			$zip        = new ZipArchive;
+			$res        = $zip->open($zipFileName);
 			if ($res === TRUE) {
 				for($i=0; $i < $zip->numFiles; $i++) {
 					if($i == 0) {continue;} // unnecessary root folder
@@ -70,11 +71,13 @@ while (@ob_end_flush());
 						}
 						fclose($fpr);
 						fclose($fpw);
+						$fileCnt++;
 					}
 					echo 'extrahiere: ' . $dest . '<br>';
 				}
 				$zip->close();
-				echo '<br><p>Sie können nun das Installationsprogramm ausführen:<br><a href="install/index.php">Zum Instalationsprogramm</a></p>';
+				echo $fileCnt . ' Dateien extrahiert.<br>';
+				echo '<p>Sie können nun das Installationsprogramm ausführen:<br><a href="install/index.php">Zum Instalationsprogramm</a></p>';
 				@unlink($zipFileName);
 			} else {
 				die('<b>Entpacken der Datei "' . $zipFileName . '" fehlgeschlagen.</b>');
