@@ -1,5 +1,7 @@
 <?php
-// created 2018-09-13 09:46 ME
+/* created 2018-09-13 09:46 ME
+    Mae CMS Loader
+*/
 $versionOk          = !version_compare(phpversion(), '7.0.0', '<');
 $pdoOk              = defined('PDO::ATTR_DRIVER_NAME');
 $archiveUrl         = "https://martin-eberhardt.com/MaeCMS-latest.zip";
@@ -47,9 +49,32 @@ while (@ob_end_flush());
 			$zip = new ZipArchive;
 			$res = $zip->open($zipFileName);
 			if ($res === TRUE) {
-				$zip->extractTo($rootPath);
+				for($i=0; $i < $zip->numFiles; $i++) {
+					if($i == 0) {continue;} // unnecessary root folder
+					$name   = $zip->getNameIndex( $i );
+					$parts  = explode('/', $name);
+					if(count($parts) > 1) {
+						array_shift($parts);
+					}
+					$dest   = implode('/', $parts);
+					$dir    = dirname($dest);
+					$isDir  = substr($dest, -1, 1) == '/';
+					if($dir != '.' && !file_exists($dir)) {
+						mkdir( $dir, 0777, true );
+					}
+					if(!$isDir) {
+						$fpr = $zip->getStream($name);
+						$fpw = fopen($dest, 'w');
+						while($data = fread($fpr, 1024)) {
+							fwrite($fpw, $data);
+						}
+						fclose($fpr);
+						fclose($fpw);
+					}
+					echo 'extrahiere: ' . $dest . '<br>';
+				}
 				$zip->close();
-				echo '<p>Sie können nun das Installationsprogramm ausführen:<br><a href="install/index.php">Zum Instalationsprogramm</a></p>';
+				echo '<br><p>Sie können nun das Installationsprogramm ausführen:<br><a href="install/index.php">Zum Instalationsprogramm</a></p>';
 				@unlink($zipFileName);
 			} else {
 				die('<b>Entpacken der Datei "' . $zipFileName . '" fehlgeschlagen.</b>');
