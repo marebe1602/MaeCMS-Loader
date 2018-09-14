@@ -77,7 +77,7 @@ while (@ob_end_flush());
 				}
 				$zip->close();
 				echo $fileCnt . ' Dateien extrahiert.<br>';
-				echo '<br><p>Sie können nun das Installationsprogramm ausführen:<br><a href="install/index.php">Zum Instalationsprogramm</a></p>';
+				echo '<br><p>Sie können nun das Installationsprogramm ausführen:<br><a href="install/index.php">Zum Instalationsprogramm</a></p><br><br>';
 				@unlink($zipFileName);
 			} else {
 				die('<b>Entpacken der Datei "' . $zipFileName . '" fehlgeschlagen.</b>');
