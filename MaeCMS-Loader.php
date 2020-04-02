@@ -1,6 +1,6 @@
 <?php
 /* created 2018-09-13 09:46 ME
-    Mae CMS Loader
+   Mae CMS Loader
 */
 $versionOk          = !version_compare(phpversion(), '7.0.0', '<');
 $pdoOk              = defined('PDO::ATTR_DRIVER_NAME');
