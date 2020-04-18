@@ -4,6 +4,7 @@
 */
 $versionOk          = !version_compare(phpversion(), '7.0.0', '<');
 $pdoOk              = defined('PDO::ATTR_DRIVER_NAME');
+$alloUrlFopen       = ini_get('allow_url_fopen');
 $archiveUrl         = "https://martin-eberhardt.com/MaeCMS-latest.zip";
 $zipFileName        = "MaeCMS-latest.zip";
 $rootPath           = dirname(__FILE__);
@@ -40,15 +41,20 @@ while (@ob_end_flush());
 		<?php if($pdoOk) {echo '<i>OK</i>';} else {die('<b>Nicht installiert</b>');} ?>
 		</p>
 
+        <?php if(!$alloUrlFopen) {
+            die('<p><b>Auf Ihrem Webspace ist die Option "allow_url_fopen" deaktiviert.<br>Die Zip-Datei mit der aktuellen Version des Systems kann deshalb nicht entpackt werden.<br>Sie können die Datei über den folgenden <a href="' . $archiveUrl . '">Link</a> selbst herunterladen und entpacken.<br>Anschließend gelangen Sie über den folgenden <a href="install/index.php">Link</a> zum Installationsprogramm.<br><br>Sie können aber auch versuchen, die Option "allow_url_fopen" über die Webspace-Konfiguration zu aktivieren und starten den MaeCMS-Loader anschließend neu. </b></p>');
+        } ?>
+
         <?php if(!isset($_GET['action']) || $_GET['action'] != 'install') { ?>
         <p><br><a href="?action=install">MaeCMS installieren</a></p>
         <?php } else { ?>
 
             <p>ZIP Archiv herunterladen...</p>
 	        <?php
-	        $f = file_put_contents( $zipFileName, fopen( $archiveUrl, 'r' ), LOCK_EX );
-	        if ( false === $f ) {
-		        die( '<b>download fehlgeschlagen, URL: ' . $archiveUrl . '</b>' );
+            $zipRes = fopen( $archiveUrl, 'r' );
+	        $f = file_put_contents( $zipFileName, $zipRes, LOCK_EX );
+	        if ( $zipRes === false || $f === false ) {
+		        die( '<b>download fehlgeschlagen, URL: <a href="' . $archiveUrl . '">' . $archiveUrl . '</a></b>' );
 	        }
 	        echo '<p>ZIP Archiv entpacken...</p>';
 	        $fileCnt = 0;
