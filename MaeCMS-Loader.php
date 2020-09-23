@@ -18,7 +18,7 @@ while (@ob_end_flush());
 		<meta charset="utf-8">
 		<style>
 			html, body {width: 100%;height: 100%;margin: 0}
-			body {font-family: Courier, monospace;font-size: 17px;color: #ccc;background-color: #000;padding: 0 25px;line-height: 1.2em}
+			body {font-family: Courier, monospace;font-size: 17px;color: #ccc;background-color: #000;padding: 0 25px;line-height: 1.2em;box-sizing: border-box}
 			strong {font-weight: bold}
 			p {margin: 0 0 10px 0}
 			b {color: orangered;font-weight: normal}
