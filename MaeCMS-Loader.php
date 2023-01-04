@@ -5,11 +5,12 @@
 $versionOk          = !version_compare(phpversion(), '7.0.0', '<');
 $pdoOk              = defined('PDO::ATTR_DRIVER_NAME');
 $alloUrlFopen       = ini_get('allow_url_fopen');
+$zipOk              = class_exists('ZipArchive');
 $archiveUrl         = "https://martin-eberhardt.com/MaeCMS-latest.zip";
 $zipFileName        = "MaeCMS-latest.zip";
 $rootPath           = dirname(__FILE__);
 $alreadyInstalled   = file_exists($rootPath . '/system');
-while (@ob_end_flush());
+$fileWriteOk        = (file_put_contents($rootPath . '/test.txt', 'test') && @unlink($rootPath . '/test.txt')) !== false;
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -27,7 +28,7 @@ while (@ob_end_flush());
 		</style>
 	</head>
 	<body>
-		<p><br><strong>MaeCMS Loader 1.1</strong></p>
+		<p><br><strong>MaeCMS Loader 1.2</strong></p>
 		<?php if($alreadyInstalled) die('Es befindet sich bereits ein installiertes System auf dem Server.'); ?>
 		<p><?php
 		if($versionOk) {
@@ -44,6 +45,22 @@ while (@ob_end_flush());
         <?php if(!$alloUrlFopen) {
             die('<p><b>Auf Ihrem Webspace ist die Option "allow_url_fopen" deaktiviert.<br>Die Zip-Datei mit der aktuellen Version des Systems kann deshalb nicht entpackt werden.<br>Sie können die Datei über den folgenden <a href="' . $archiveUrl . '">Link</a> selbst herunterladen und entpacken.<br>Anschließend gelangen Sie über den folgenden <a href="install/index.php">Link</a> zum Installationsprogramm.<br><br>Sie können aber auch versuchen, die Option "allow_url_fopen" über die Webspace-Konfiguration zu aktivieren und starten den MaeCMS-Loader anschließend neu. </b></p>');
         } ?>
+        <p><?php
+			if($zipOk) {
+				echo 'ZipArchive Extension <i>OK</i>';
+			}
+			else {
+				die('<b>Die ZipArchive Extension (php-zip) ist auf ihrem Server nicht installiert.</b>');
+			}
+			?></p>
+        <p><?php
+			if($fileWriteOk) {
+				echo 'Schreibberechtigung für Dateien <i>OK</i>';
+			}
+			else {
+				die('<b>Der PHP Prozess hat keine Berechtigung, Dateien anzulegen.</b>');
+			}
+			?></p>
 
         <?php if(!isset($_GET['action']) || $_GET['action'] != 'install') { ?>
         <p><br><a href="?action=install">MaeCMS installieren</a></p>
