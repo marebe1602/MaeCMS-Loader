@@ -6,6 +6,7 @@ $versionOk          = !version_compare(phpversion(), '7.0.0', '<');
 $pdoOk              = defined('PDO::ATTR_DRIVER_NAME');
 $alloUrlFopen       = ini_get('allow_url_fopen');
 $zipOk              = class_exists('ZipArchive');
+$intlOk             = class_exists('IntlDateFormatter');
 $archiveUrl         = "https://martin-eberhardt.com/MaeCMS-latest.zip";
 $zipFileName        = "MaeCMS-latest.zip";
 $rootPath           = dirname(__FILE__);
@@ -28,7 +29,7 @@ $fileWriteOk        = (file_put_contents($rootPath . '/test.txt', 'test') && @un
 		</style>
 	</head>
 	<body>
-		<p><br><strong>MaeCMS Loader 1.2</strong></p>
+		<p><br><strong>MaeCMS Loader 1.3</strong></p>
 		<?php if($alreadyInstalled) die('Es befindet sich bereits ein installiertes System auf dem Server.'); ?>
 		<p><?php
 		if($versionOk) {
@@ -51,6 +52,14 @@ $fileWriteOk        = (file_put_contents($rootPath . '/test.txt', 'test') && @un
 			}
 			else {
 				die('<b>Die ZipArchive Extension (php-zip) ist auf ihrem Server nicht installiert.</b>');
+			}
+			?></p>
+        <p><?php
+			if($intlOk) {
+				echo 'PHP Internationalisierungserweiterung (intl) <i>OK</i>';
+			}
+			else {
+				die('<b>In der php.ini ist die Internationalisierungserweiterung nicht aktiviert, bzw. nicht installiert (extension=intl wird benötigt für Datumsanzeigen).</b>');
 			}
 			?></p>
         <p><?php
